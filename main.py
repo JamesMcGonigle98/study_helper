@@ -17,6 +17,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import streamlit as st
+import types_of_questions
+
+import random
 import llm_chains
 
 
@@ -43,43 +46,107 @@ subject_area = st.sidebar.text_input(
     placeholder="Algebra"
 )
 
-search = st.sidebar.button("Help me study!")
+# Initialize session state (if not already initialized)
+if 'type_of_question' not in st.session_state:
+    st.session_state.type_of_question = "Multiple Choice"  # Default value
 
-if search:
+type_of_question = st.sidebar.selectbox(
+    "What type of revision do you want to do?",
+    ("Multiple Choice", "Writing Answers"))
 
+# Update session state when selectbox changes
+if st.session_state.type_of_question != type_of_question:
+    st.session_state.type_of_question = type_of_question
+
+# Initialize session state (if not already initialized)
+if 'go' not in st.session_state:
+    st.session_state.go = ""  # Default value
+
+
+go = st.sidebar.button(
+    "Go!!!"
+)
+
+if go:
     st.write(f"You've chosen to study {subject}! Let's help you with {subject_area} so that you can pass your {qualification}!")
 
-    response = llm_chains.initial_questions(subject, qualification ,subject_area)
+    types_of_questions.multi_choice(subject, qualification, subject_area)
 
-    st.write("Let's start with some questions to gauge your knowledge:")
-    
-    question = response['question'].strip().split(",")
-    answer = response['answer'].strip().split(",")
 
-    question = question[0]
-    answer = answer[0]
 
-    st.write(f"{question}?")
 
-    st.header("Write your answer")
 
-    # Question 1 
-    user_answer_1 = st.text_input("Answer 1")
-    llm_answer_1 = answer[0]
-    check_q1 = st.button("Check my answer!")
 
-    if check_q1 or user_answer_1:
-        score = llm_chains.compare_sentences(user_answer_1, llm_answer_1)
+
+
+        # st.write("Let's start with some questions to gauge your knowledge:")
+        # new_q = st.button("Generate Question", key ='new_q_key')
+
+        # if new_q:
+        #     response = llm_chains.initial_questions_multi_choice(subject, qualification, subject_area)
+
+        #     question = response['question']
+        #     answer = response['answer'].strip().split(",")
+
+        #     correct_answer = answer[0]
+        #     incorrect_answers = answer[1:]
+
+        #     shuffled_answers = random.sample(answer, len(answer))
+
+        #     st.write(f"{question}?")
+
+        #     option = st.selectbox('Answer',
+        #                  (shuffled_answers[0],
+        #                   shuffled_answers[1],
+        #                   shuffled_answers[2],
+        #                   shuffled_answers[3],
+        #                   shuffled_answers[4]))
+            
+        #     if option == correct_answer:
+        #         st.write("Correct!")
+
+        #     elif option == None:
+        #         st.write("Choose an answer")
+
+        #     elif option != correct_answer:
+        #         st.write("Try again")
+
+
+
+    # if type_of_question == "Writing Answers":
+
+    #     response = llm_chains.initial_questions_multi_choice(subject, qualification ,subject_area)
+
+    #     st.write("Let's start with some questions to gauge your knowledge:")
         
-        if score > 0.8:
-            st.write("This answer is perfect!")
+    #     question = response['question'].strip().split(",")
+    #     answer = response['answer'].strip().split(",")
 
-        elif 0.4 < score < 0.8:
-            st.write("This answer is good!")
-        
-        else:
-            st.write("Try again!")
+    #     question = question[0]
+    #     answer = answer[0]
 
-        st.write(f"The answer is {answer}")
+    #     st.write(f"{question}?")
 
-# %%
+    #     st.header("Write your answer")
+
+    #     # Question 1 
+    #     user_answer_1 = st.text_input("Your answer:")
+    #     llm_answer_1 = answer[0]
+    #     check_q1 = st.button("Check my answer!")
+
+    #     if check_q1 or user_answer_1:
+
+    #         score = llm_chains.compare_sentences(user_answer_1, llm_answer_1)
+            
+    #         if score > 0.8:
+    #             st.write("This answer is perfect!")
+
+    #         elif 0.4 < score < 0.8:
+    #             st.write("This answer is good!")
+            
+    #         else:
+    #             st.write("Try again!")
+
+    #         st.write(f"The answer is {answer}")
+
+    # %%

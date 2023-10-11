@@ -34,26 +34,26 @@ sentence_comparison_llm = SentenceTransformer('sentence-transformers/all-MiniLM-
 # %% --------------------------------------------------------------------------
 # Prompt Templates
 # -----------------------------------------------------------------------------
-prompt_template_starting_qs = PromptTemplate(
+prompt_template_starting_qs_multi = PromptTemplate(
     input_variables=['subject','qualification','subject_area'],
-    template = "I am currently studying for my {qualification} {subject} exam. I want to revise {subject_area}. Give me 1 question of {qualification} standard to assess my knowledge. Return these questions as a comma seperated list please "
+    template = "I am currently studying for my {qualification} {subject} exam. I want to revise {subject_area}. Give me 1 question of {qualification} standard. This questions should have one correct answer. Return this question as a string and do not include the answer."
 
 )
 
-prompt_template_starting_as = PromptTemplate(
+prompt_template_starting_ans_multi = PromptTemplate(
     input_variables=['question'],
-    template = "For each of the following {question}, write the answers. Return these answers as a comma seperated list "
+    template = "{question}? Write 1 correct answer and 4 other plausible, yet incorrect answers. Return the answers in a comma seperate list. None of the answers should contain a comma. The first item in the list should be the correct answer and this should be a string. The last four items in the list should be incorrect answers. Do not include any other information apart from the 1 correct answer and the 4 incorrect answers"
 )
 
 
 # %% --------------------------------------------------------------------------
 # LLM Chain Functions 
 # -----------------------------------------------------------------------------
-def initial_questions(subject, qualification ,subject_area):
+def initial_questions_multi_choice(subject, qualification ,subject_area):
 
-    initial_q_chain = LLMChain(llm=llm, prompt=prompt_template_starting_qs, output_key="question")
+    initial_q_chain = LLMChain(llm=llm, prompt=prompt_template_starting_qs_multi, output_key="question")
 
-    initial_a_chain = LLMChain(llm=llm, prompt=prompt_template_starting_as, output_key="answer")
+    initial_a_chain = LLMChain(llm=llm, prompt=prompt_template_starting_ans_multi, output_key="answer")
 
     chain = SequentialChain(
         chains = [initial_q_chain, initial_a_chain],
