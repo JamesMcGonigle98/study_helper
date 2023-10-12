@@ -22,20 +22,17 @@ import random
 
 
 # %% --------------------------------------------------------------------------
-# 
+# Multiple Choice
 # -----------------------------------------------------------------------------
-def multi_choice(subject, qualification, subject_area):    
+def multi_choice(subject, qualification ,subject_area): 
 
-    response = initial_questions_multi_choice(subject, qualification ,subject_area)
-    
+    response = llm_chains.initial_questions_multi_choice(subject, qualification ,subject_area)   
+
     question = response['question']
-    # question = question[2:-2]
     
     answer = response['answer'].strip().split(",")
-    # answer = [item[2:-1] for item in answer]
 
     correct_answer = answer[0]
-    # correct_answer = correct_answer[:1]
 
     shuffled_answers = random.sample(answer, len(answer))
 
@@ -57,21 +54,41 @@ def multi_choice(subject, qualification, subject_area):
         st.write("Try again")
 
 
-##################################################################
 
-    # option = st.selectbox('Answer',
-    #                 ("Choose an answer",
-    #                 shuffled_answers[0],
-    #                 shuffled_answers[1],
-    #                 shuffled_answers[2],
-    #                 shuffled_answers[3],
-    #                 shuffled_answers[4]))
-    
-    # if option == correct_answer:
-    #     st.write("Correct!")
+# %% --------------------------------------------------------------------------
+# Writing Answers
+# -----------------------------------------------------------------------------
+def writing_answers(subject, qualification, subject_area):
 
-    # elif option == "Choose an answer":
-    #     st.write("")
+    response = llm_chains.initial_questions_writing_answers(subject, qualification ,subject_area)
 
-    # elif option != correct_answer:
-    #     st.write("Try again")
+    question = response['question'].strip().split(",")
+    answer = response['answer'].strip().split(",")
+
+    question = question[0]
+    answer = answer[0]
+
+    st.write(f"{question}?")
+
+    st.header("Write your answer")
+
+    # Question 1 
+    user_answer_1 = st.text_input("Your answer:")
+    llm_answer_1 = answer[0]
+    check_q1 = st.button("Check my answer!")
+
+    if check_q1 or user_answer_1:
+
+        score = llm_chains.compare_sentences(user_answer_1, llm_answer_1)
+        
+        if score > 0.8:
+            st.write("This answer is perfect!")
+
+        elif 0.4 < score < 0.8:
+            st.write("This answer is good!")
+        
+        else:
+            st.write("Try again!")
+
+        st.write(f"The answer is {answer}")
+

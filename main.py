@@ -43,7 +43,7 @@ qualification = st.sidebar.selectbox(
 
 subject_area = st.sidebar.text_input(
     f"Which area of {subject} would you like to revise?",
-    placeholder="Algebra"
+    placeholder=""
 )
 
 type_of_question = st.sidebar.selectbox(
@@ -62,88 +62,13 @@ if st.sidebar.button("Go!!!"):
 else:
     st.session_state.button_clicked = False
 
-
+st.write(f"You've chosen to study {subject}! Let's help you with {subject_area} so that you can pass your {qualification}!")  
 
 if st.session_state.button_clicked and type_of_question == "Multiple Choice":
-    st.write(f"You've chosen to study {subject}! Let's help you with {subject_area} so that you can pass your {qualification}!")
+ 
+    types_of_questions.multi_choice(subject, qualification, subject_area)
 
-    st.session_state['question'] = types_of_questions.multi_choice(subject, qualification, subject_area)
+elif st.session_state.button_clicked and type_of_question == "Writing Answers":
 
+    types_of_questions.writing_answers(subject, qualification, subject_area)
 
-
-
-
-
-
-
-        # st.write("Let's start with some questions to gauge your knowledge:")
-        # new_q = st.button("Generate Question", key ='new_q_key')
-
-        # if new_q:
-        #     response = llm_chains.initial_questions_multi_choice(subject, qualification, subject_area)
-
-        #     question = response['question']
-        #     answer = response['answer'].strip().split(",")
-
-        #     correct_answer = answer[0]
-        #     incorrect_answers = answer[1:]
-
-        #     shuffled_answers = random.sample(answer, len(answer))
-
-        #     st.write(f"{question}?")
-
-        #     option = st.selectbox('Answer',
-        #                  (shuffled_answers[0],
-        #                   shuffled_answers[1],
-        #                   shuffled_answers[2],
-        #                   shuffled_answers[3],
-        #                   shuffled_answers[4]))
-            
-        #     if option == correct_answer:
-        #         st.write("Correct!")
-
-        #     elif option == None:
-        #         st.write("Choose an answer")
-
-        #     elif option != correct_answer:
-        #         st.write("Try again")
-
-
-
-    # if type_of_question == "Writing Answers":
-
-    #     response = llm_chains.initial_questions_multi_choice(subject, qualification ,subject_area)
-
-    #     st.write("Let's start with some questions to gauge your knowledge:")
-        
-    #     question = response['question'].strip().split(",")
-    #     answer = response['answer'].strip().split(",")
-
-    #     question = question[0]
-    #     answer = answer[0]
-
-    #     st.write(f"{question}?")
-
-    #     st.header("Write your answer")
-
-    #     # Question 1 
-    #     user_answer_1 = st.text_input("Your answer:")
-    #     llm_answer_1 = answer[0]
-    #     check_q1 = st.button("Check my answer!")
-
-    #     if check_q1 or user_answer_1:
-
-    #         score = llm_chains.compare_sentences(user_answer_1, llm_answer_1)
-            
-    #         if score > 0.8:
-    #             st.write("This answer is perfect!")
-
-    #         elif 0.4 < score < 0.8:
-    #             st.write("This answer is good!")
-            
-    #         else:
-    #             st.write("Try again!")
-
-    #         st.write(f"The answer is {answer}")
-
-    # %%
