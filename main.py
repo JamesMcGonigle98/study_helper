@@ -46,31 +46,28 @@ subject_area = st.sidebar.text_input(
     placeholder="Algebra"
 )
 
-# Initialize session state (if not already initialized)
-if 'type_of_question' not in st.session_state:
-    st.session_state.type_of_question = "Multiple Choice"  # Default value
-
 type_of_question = st.sidebar.selectbox(
     "What type of revision do you want to do?",
-    ("Multiple Choice", "Writing Answers"))
-
-# Update session state when selectbox changes
-if st.session_state.type_of_question != type_of_question:
-    st.session_state.type_of_question = type_of_question
-
-# Initialize session state (if not already initialized)
-if 'go' not in st.session_state:
-    st.session_state.go = ""  # Default value
-
-
-go = st.sidebar.button(
-    "Go!!!"
+    ("Multiple Choice", "Writing Answers")
 )
 
-if go:
+# Initialize session state (if not already initialized)
+if 'button_clicked' not in st.session_state:
+    st.session_state.button_clicked = False  # Default value
+
+# Button
+if st.sidebar.button("Go!!!"):
+    # Update session state when button is clicked
+    st.session_state.button_clicked = True
+else:
+    st.session_state.button_clicked = False
+
+
+
+if st.session_state.button_clicked and type_of_question == "Multiple Choice":
     st.write(f"You've chosen to study {subject}! Let's help you with {subject_area} so that you can pass your {qualification}!")
 
-    types_of_questions.multi_choice(subject, qualification, subject_area)
+    st.session_state['question'] = types_of_questions.multi_choice(subject, qualification, subject_area)
 
 
 

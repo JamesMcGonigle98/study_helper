@@ -25,22 +25,13 @@ import random
 # 
 # -----------------------------------------------------------------------------
 def multi_choice(subject, qualification, subject_area):    
+
+    response = initial_questions_multi_choice(subject, qualification ,subject_area)
     
-    if 'option' not in st.session_state:
-        st.session_state.option = "Choose an answer"  # Default value
-
-    if 'response' not in st.session_state:
-        st.session_state.response = ""  # Default value
-    
-    if 'answer' not in st.session_state:
-        st.session_state.response = ""  # Default value
-
-    st.session_state.response = llm_chains.initial_questions_multi_choice(subject, qualification, subject_area)
-
-    question = st.session_state.response['question']
+    question = response['question']
     # question = question[2:-2]
     
-    answer = st.session_state.response['answer'].strip().split(",")
+    answer = response['answer'].strip().split(",")
     # answer = [item[2:-1] for item in answer]
 
     correct_answer = answer[0]
@@ -51,18 +42,18 @@ def multi_choice(subject, qualification, subject_area):
     st.write(f"{question}?")
 
     # Update session state when selectbox changes
-    st.session_state.option = st.selectbox('Answer',
+    option = st.selectbox('Answer',
             ("Choose an answer",) + tuple(shuffled_answers),
             index=0,  # Default index
             on_change=None,  # Optional: function to run on change
             args=()  # Optional: arguments for on_change function
             )
     
-    if st.session_state.option == correct_answer:
+    if option == correct_answer:
         st.write("Correct!")
-    elif st.session_state.option == "Choose an answer":
+    elif option == "Choose an answer":
         st.write("")
-    elif st.session_state.option != correct_answer:
+    elif option != correct_answer:
         st.write("Try again")
 
 
