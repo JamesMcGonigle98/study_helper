@@ -5,4 +5,3 @@ streamlit>=1.0.0
 sentence-transformers>=2.1.0
 scikit-learn>=0.24.0
 langchain>=0.0.246
-os
