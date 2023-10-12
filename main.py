@@ -30,7 +30,7 @@ st.title("Study Helper")
 
 subject = st.sidebar.selectbox(
     "Which subject would you like to revise today?",
-    ("Maths","Physics","Chemistry","Biology"),
+    ("Maths","Physics","Chemistry","Biology","History"),
     placeholder="Maths"
 )
 
@@ -55,7 +55,7 @@ if 'button_clicked' not in st.session_state:
     st.session_state.button_clicked = False  # Default value
 
 # Button
-if st.sidebar.button("Go!!!"):
+if st.sidebar.button("Generate questions!"):
     # Update session state when button is clicked
     st.session_state.button_clicked = True
 else:
