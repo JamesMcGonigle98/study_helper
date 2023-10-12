@@ -62,8 +62,6 @@ def multi_choice(subject, qualification ,subject_area):
     elif option != correct_answer:
         st.write("Try again")
 
-openai_key = st.secrets['openai_key']
-
 # %% --------------------------------------------------------------------------
 # Writing Answers
 # -----------------------------------------------------------------------------
@@ -101,7 +99,7 @@ def writing_answers(subject, qualification, subject_area):
 
         st.write(f"The answer is {answer}")
 
-
+openai_key = st.secrets["openai_key"]
 
 # %% --------------------------------------------------------------------------
 # Create the LLMs
