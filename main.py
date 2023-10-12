@@ -62,7 +62,7 @@ def multi_choice(subject, qualification ,subject_area):
     elif option != correct_answer:
         st.write("Try again")
 
-openai_key = os.environ['openai_key']
+openai_key = st.secrets['openai_key']
 
 # %% --------------------------------------------------------------------------
 # Writing Answers
