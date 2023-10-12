@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 secret_key.py
+secrets.toml
