@@ -15,6 +15,7 @@ __author__ = "JamesMcGonigle"
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 import streamlit as st
 import types_of_questions
@@ -61,7 +62,7 @@ def multi_choice(subject, qualification ,subject_area):
     elif option != correct_answer:
         st.write("Try again")
 
-
+openai_key = os.environ['openai_key']
 
 # %% --------------------------------------------------------------------------
 # Writing Answers
