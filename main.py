@@ -17,6 +17,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import streamlit as st
+import types_of_questions
+
+import random
 import llm_chains
 
 
@@ -39,46 +42,32 @@ qualification = st.sidebar.selectbox(
 
 subject_area = st.sidebar.text_input(
     f"Which area of {subject} would you like to revise?",
-    placeholder="Algebra"
+    placeholder=""
 )
 
-search = st.sidebar.button("Help me study!")
+type_of_question = st.sidebar.selectbox(
+    "What type of revision do you want to do?",
+    ("Multiple Choice", "Writing Answers")
+)
 
-if search:
+# Initialize session state (if not already initialized)
+if 'button_clicked' not in st.session_state:
+    st.session_state.button_clicked = False  # Default value
 
-    st.write(f"You've chosen to study {subject}! Let's help you with {subject_area} so that you can pass your {qualification}!")
+# Button
+if st.sidebar.button("Go!!!"):
+    # Update session state when button is clicked
+    st.session_state.button_clicked = True
+else:
+    st.session_state.button_clicked = False
 
-    response = llm_chains.initial_questions(subject, qualification ,subject_area)
+st.write(f"You've chosen to study {subject}! Let's help you with {subject_area} so that you can pass your {qualification}!")  
 
-    st.write("Let's start with some questions to gauge your knowledge:")
-    
-    question = response['question'].strip().split(",")
-    answer = response['answer'].strip().split(",")
+if st.session_state.button_clicked and type_of_question == "Multiple Choice":
+ 
+    types_of_questions.multi_choice(subject, qualification, subject_area)
 
-    question = question[0]
-    answer = answer[0]
+elif st.session_state.button_clicked and type_of_question == "Writing Answers":
 
-    st.write(f"{question}?")
+    types_of_questions.writing_answers(subject, qualification, subject_area)
 
-    st.header("Write your answer")
-
-    # Question 1 
-    user_answer_1 = st.text_input("Answer 1")
-    llm_answer_1 = answer[0]
-    check_q1 = st.button("Check my answer!")
-
-    if check_q1 or user_answer_1:
-        score = llm_chains.compare_sentences(user_answer_1, llm_answer_1)
-        
-        if score > 0.8:
-            st.write("This answer is perfect!")
-
-        elif 0.4 < score < 0.8:
-            st.write("This answer is good!")
-        
-        else:
-            st.write("Try again!")
-
-        st.write(f"The answer is {answer}")
-
-# %%
